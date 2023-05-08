@@ -19,13 +19,13 @@ class JobUrlItem():
 class JobDetailItem():
     _id : str
     name: str
-    company: Optional[list] = field(default_factory=list)
+    company: str
     area : str
     wage : str
     date_start : str
     day_left : str
-    urgent : Optional[str] = field(default_factory=str)
-    career : Optional[str] = None
     rank : str
     job_kind : str
+    urgent : Optional[str] = field(default_factory=str)
+    career : Optional[str] = None
     detail: Optional[list] = field(default_factory=list)

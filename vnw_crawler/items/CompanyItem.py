@@ -23,9 +23,9 @@ class CompanySubUrlItem():
 class CompanyDetailItem():
     _id : str #
     name: str
+    company_url : str
     career: Optional[str] = None
     area : Optional[str] = None
     follow : Optional[str] = None
-    company_url : str
     social: Optional[str] = field(default_factory=str)
     infor : Optional[list] = field(default_factory=list)
