@@ -6,8 +6,14 @@
 from scrapy import signals
 
 # useful for handling different item types with a single interface
-from itemadapter import is_item, ItemAdapter
+# from itemadapter import is_item, ItemAdapter
+from scrapy.utils.project import get_project_settings
+settings = get_project_settings()
 
+from scrapy.extensions.httpcache import DummyPolicy
+class CachePolicy(DummyPolicy):
+    def should_cache_response(self, response, request):
+        return response.status == 200
 
 class VnwCrawlerSpiderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
