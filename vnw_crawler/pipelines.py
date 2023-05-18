@@ -34,10 +34,12 @@ class VnwCrawlerPipeline:
         self.collection_company_url = db[settings['MONGO_COLLECTION_COMPANY_URL']]
         self.collection_company_sub_url = db[settings['MONGO_COLLECTION_COMPANY_SUB_URL']]
         self.collection_company_detail = db[settings['MONGO_COLLECTION_COMPANY_DETAIL']]
+        
         self.collection_category_area = db[settings['MONGO_COLLECTION_CATEGORY_AREA']]
         self.collection_category_rank = db[settings['MONGO_COLLECTION_CATEGORY_RANK']]
         self.collection_category_job_kind = db[settings['MONGO_COLLECTION_CATEGORY_JOB_KIND']]
         self.collection_category_career = db[settings['MONGO_COLLECTION_CATEGORY_CAREER']]
+        
         self.collection_job_url = db[settings['MONGO_COLLECTION_JOB_URL']]
         self.collection_job_detail = db[settings['MONGO_COLLECTION_JOB_DETAIL']]
 
@@ -62,7 +64,7 @@ class VnwCrawlerPipeline:
             if item._id is None:
                 self.save_db(self.collection_company_detail, item, "company-detail")
             else:
-                self.append_set_db(self.collection_company_detail,item._id, "company-detail")
+                self.append_set_db(self.collection_company_detail,item._id, item, "company-detail")
         
         elif isinstance(item, JobUrlItem):
             self.save_db(self.collection_job_url, item, "job-url")

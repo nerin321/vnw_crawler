@@ -12,7 +12,7 @@ class JobUrlItem():
     _id : str
     name: str
     date_update: str
-    job_kind: str
+    # job_kind: str
     url : str
 
 @dataclass
@@ -21,8 +21,8 @@ class JobDetailItem():
     name: str
     company: str
     area : str
-    wage : str
-    date_start : str
+    salary : str
+    date_update : str
     day_left : str
     rank : str
     job_kind : str

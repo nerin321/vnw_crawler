@@ -90,6 +90,8 @@ AUTOTHROTTLE_TARGET_CONCURRENCY = 3 * 3
 # Enable showing throttling stats for every response received:
 AUTOTHROTTLE_DEBUG = True
 
+# DUPEFILTER_DEBUG = True
+
 # Enable and configure HTTP caching (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
 HTTPCACHE_ENABLED = True
