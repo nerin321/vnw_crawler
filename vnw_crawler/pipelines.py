@@ -12,7 +12,7 @@ import pymongo
 
 # import item
 from vnw_crawler.items.CategoryItem import CategoryAreaItem, CategoryCareerItem, CategoryJobKindItem, CategoryRankItem
-from vnw_crawler.items.CompanyItem import CompanyDetailItem, CompanySubUrlItem, CompanyUrlItem
+from vnw_crawler.items.CompanyItem import CompanyDetailItem, CompanySubUrlItem, CompanyUrlItem, CompanySubDetailItem
 from vnw_crawler.items.JobItem import JobUrlItem, JobDetailItem
 
 from scrapy.utils.project import get_project_settings
@@ -34,7 +34,8 @@ class VnwCrawlerPipeline:
         self.collection_company_url = db[settings['MONGO_COLLECTION_COMPANY_URL']]
         self.collection_company_sub_url = db[settings['MONGO_COLLECTION_COMPANY_SUB_URL']]
         self.collection_company_detail = db[settings['MONGO_COLLECTION_COMPANY_DETAIL']]
-        
+        self.collection_employer_detail = db[settings['MONGO_COLLECTION_EMPLOYER_DETAIL']]
+
         self.collection_category_area = db[settings['MONGO_COLLECTION_CATEGORY_AREA']]
         self.collection_category_rank = db[settings['MONGO_COLLECTION_CATEGORY_RANK']]
         self.collection_category_job_kind = db[settings['MONGO_COLLECTION_CATEGORY_JOB_KIND']]
@@ -60,12 +61,10 @@ class VnwCrawlerPipeline:
             self.save_db(self.collection_company_url, item, "company-url")
         elif isinstance(item, CompanySubUrlItem):
             self.save_db(self.collection_company_sub_url, item, "company-sub-url")
+        elif isinstance(item, CompanySubDetailItem):
+            self.save_db(self.collection_employer_detail, item, "employer-detail")
         elif isinstance(item, CompanyDetailItem):
-            if item._id is None:
-                self.save_db(self.collection_company_detail, item, "company-detail")
-            else:
-                self.append_set_db(self.collection_company_detail,item._id, item, "company-detail")
-        
+            self.save_db(self.collection_company_detail, item, "company-detail")
         elif isinstance(item, JobUrlItem):
             self.save_db(self.collection_job_url, item, "job-url")
         elif isinstance(item, JobDetailItem):
