@@ -65,7 +65,7 @@ class VnwCrawlerJobUrlSpider(VnwCrawlerBaseSpider):
             day_update = job['lastUpdatedOn']
 
             yield JobUrlItem(
-                _id = ids,
+                _id = str(ids),
                 name=title,
                 date_update=day_update,
                 url=url

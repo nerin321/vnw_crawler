@@ -16,10 +16,9 @@ class VnwCrawlerCompanyUrlSpider(VnwCrawlerBaseSpider):
     start_urls = [get_company_url()]
 
     def parse(self, response):
-        
         company_list = response.css(".eyXHBE")
         for company in company_list.css(".forjik"):
-            company_info = company.css(".haOJYX")
+            company_info = company.css(".ZULDB")
             url = company_info.xpath("a/@href").get()
             title = company_info.xpath("a/text()").get()
 
