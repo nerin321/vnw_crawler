@@ -24,8 +24,20 @@ class CompanyDetailItem():
     _id : str #
     name: str
     company_url : str
-    career: Optional[str] = None
-    area : Optional[str] = None
+    career: str
     follow : Optional[str] = None
-    social: Optional[str] = field(default_factory=str)
-    infor : Optional[list] = field(default_factory=list)
+    area : Optional[str] = None
+    social: Optional[str] = None
+    address: Optional[list] = field(default_factory=list)
+
+@dataclass
+class CompanySubDetailItem():
+    _id : str
+    name : str
+    follower : str
+    address : str
+    career : str
+    headquarters : Optional[str] = None
+    scale : Optional[str] = None
+    contact : Optional[str] = None
+    benefit : Optional[list] = field(default_factory=list)

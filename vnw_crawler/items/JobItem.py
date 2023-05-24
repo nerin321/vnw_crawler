@@ -25,7 +25,7 @@ class JobDetailItem():
     date_update : str
     day_left : str
     rank : str
-    job_kind : str
+    # job_kind : str
     urgent : Optional[str] = field(default_factory=str)
     career : Optional[str] = None
     detail: Optional[list] = field(default_factory=list)
