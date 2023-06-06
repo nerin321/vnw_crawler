@@ -20,9 +20,9 @@ class VnwCrawlerCompanyDetailSpider(VnwCrawlerBaseSpider):
         if test:
             self.start_urls = [
                 CompanyUrlItem(
-                    _id = "Net-Company",
-                    name= "Netcompany ",
-                    url= "https://www.vietnamworks.com/company/Net-Company"
+                    _id = "DientuDongYangHP",
+                    name= "Công Ty TNHH Điện Tử Dong Yang Hải Phòng",
+                    url= "https://www.vietnamworks.com/company/DientuDongYangHP"
                 )
             ]
 
@@ -102,7 +102,12 @@ class VnwCrawlerCompanyDetailSpider(VnwCrawlerBaseSpider):
                 address.append(p_content)
             elif b_content != "":
                 address.append(b_content)
-            
+        for li in cp_address.css("ul li"):
+            content=li.css("li::text").get()
+            if content is not None:
+                text=content.strip()
+            if text != "":
+                address.append(text)   
         yield CompanyDetailItem(
             _id = cate_url._id,
             name= cate_url.name,
