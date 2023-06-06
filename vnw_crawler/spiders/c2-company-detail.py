@@ -20,9 +20,9 @@ class VnwCrawlerCompanyDetailSpider(VnwCrawlerBaseSpider):
         if test:
             self.start_urls = [
                 CompanyUrlItem(
-                    _id = "Cj-cgv",
-                    name= "CJ CGV Vietnam",
-                    url= "https://www.vietnamworks.com/company/Cj-cgv"
+                    _id = "Net-Company",
+                    name= "Netcompany ",
+                    url= "https://www.vietnamworks.com/company/Net-Company"
                 )
             ]
 
@@ -62,16 +62,47 @@ class VnwCrawlerCompanyDetailSpider(VnwCrawlerBaseSpider):
         total_follow = response.css(".cp_follow_survey")
         follow = total_follow.css("span.total_follow::text").get()
         if follow:
-            follower = follow.strip()
+            follower = follow.strip().replace("(", "").replace(")", "")
         
         address = []
         container = response.css(".cp_container_section")
         uls = container.css("ul.cp_our_office")
-        for p in uls.css(".cp_address-container p"):
-            content = p.css("p::text").get()
-            if content is not None:
-                address.append(content)
-        
+        cp_address = uls.css("li div.cp_address-container")
+        for item in cp_address.css("div"):
+            div_text = item.css("div::text").get()
+            span_text = item.css("span::text").get()
+            
+            if div_text is not None:
+                div_content = div_text.strip()
+            else:
+                div_content = ""
+            if span_text is not None:
+                span_content = span_text.strip()
+            else:
+                span_content = ""
+
+            if div_content != "":
+                address.append(div_content)
+            elif span_content != "":
+                address.append(span_content)
+        for item in cp_address.css("p"):
+            p = item.css("p::text").get()
+            b = item.css("b::text").get()
+
+            if p is not None:
+                p_content = p.strip()
+            else:
+                p_content = ""
+            if b is not None:
+                b_content = b.strip()
+            else:
+                b_content = ""
+            
+            if p_content != "":
+                address.append(p_content)
+            elif b_content != "":
+                address.append(b_content)
+            
         yield CompanyDetailItem(
             _id = cate_url._id,
             name= cate_url.name,

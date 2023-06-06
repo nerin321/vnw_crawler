@@ -52,12 +52,14 @@ class VnwCrawlerJobUrlSpider(VnwCrawlerBaseSpider):
 
         page_foreground = response.css(".page-job-detail__header ")
         job_header =page_foreground.css(".job-header-info")
+        urgent_title = job_header.css(".job-title")
+        urgent_label = urgent_title.css("span.label-urgent::text").get()
+        if urgent_label:
+            urgent = urgent_label
+        else:
+            urgent = ""
+        compamy_name = ""
         for item in job_header:
-            urgent_label = item.xpath("span/text()").get()
-            if urgent_label:
-                urgent = urgent_label
-            else:
-                urgent = ""
             
             sub_company = item.css(".company-name")
             compamy_name = sub_company.xpath("a/span/text()").get()
