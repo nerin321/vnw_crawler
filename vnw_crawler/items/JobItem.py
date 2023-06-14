@@ -11,7 +11,6 @@ from typing import Optional
 class JobUrlItem():
     _id : str
     name: str
-    date_update: str
     # job_kind: str
     url : str
 
@@ -22,9 +21,9 @@ class JobDetailItem():
     company: str
     area : str
     salary : str
-    date_update : str
     day_left : str
     rank : str
+    day_start : str
     # job_kind : str
     urgent : Optional[str] = field(default_factory=str)
     career : Optional[str] = None

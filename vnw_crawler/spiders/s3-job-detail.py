@@ -7,6 +7,7 @@ import re
 
 from dacite import from_dict
 from scrapy import Request
+from datetime import datetime
 
 from vnw_crawler.items.JobItem import JobUrlItem, JobDetailItem
 from vnw_crawler.items.CompanyItem import CompanySubUrlItem, CompanyUrlItem
@@ -23,7 +24,6 @@ class VnwCrawlerJobUrlSpider(VnwCrawlerBaseSpider):
                 JobUrlItem(
                     _id= "1650027",
                     name= "[Tuyển Gấp] Nhân Viên Biên Phiên Dịch Tiếng Nhật/ Japanese Interpreter",
-                    date_update= "2023-05-17T15:12:20+07:00",
                     url= "https://www.vietnamworks.com/tuyen-gap-nhan-vien-bien-phien-dich-tieng-nhat-japanese-interpreter-1650027-jv"
                 )
             ]
@@ -49,6 +49,10 @@ class VnwCrawlerJobUrlSpider(VnwCrawlerBaseSpider):
         #     detail=[]
         # )
         detail = []
+        date_format = "%d/%m/%Y"
+        area = ""
+        salary = ""
+        day_left = ""
 
         page_foreground = response.css(".page-job-detail__header ")
         job_header =page_foreground.css(".job-header-info")
@@ -64,27 +68,28 @@ class VnwCrawlerJobUrlSpider(VnwCrawlerBaseSpider):
             sub_company = item.css(".company-name")
             compamy_name = sub_company.xpath("a/span/text()").get()
             company_sub_url = sub_company.xpath("a/@href").get()
-            if "https://www.vietnamworks.com/nha-tuyen-dung/" in company_sub_url:
-                company_id = company_sub_url.replace("https://www.vietnamworks.com/nha-tuyen-dung/", "")
-                yield CompanySubUrlItem(
-                    _id = company_id,
-                    name=compamy_name,
-                    url= company_sub_url
-                )
-            elif "https://www.vietnamworks.com/companies/" in company_sub_url:
-                company_id = company_sub_url.replace("https://www.vietnamworks.com/companies/", "")
-                yield CompanySubUrlItem(
-                    _id = company_id,
-                    name=compamy_name,
-                    url= company_sub_url
-                )
-            else: 
-                company_id = company_sub_url.replace("https://www.vietnamworks.com/company/", "")
-                yield CompanyUrlItem(
-                    _id = company_id,
-                    name=compamy_name,
-                    url= company_sub_url
-                )
+            if company_sub_url is not None:
+                if "https://www.vietnamworks.com/nha-tuyen-dung/" in company_sub_url:
+                    company_id = company_sub_url.replace("https://www.vietnamworks.com/nha-tuyen-dung/", "")
+                    yield CompanySubUrlItem(
+                        _id = company_id,
+                        name=compamy_name,
+                        url= company_sub_url
+                    )
+                elif "https://www.vietnamworks.com/companies/" in company_sub_url:
+                    company_id = company_sub_url.replace("https://www.vietnamworks.com/companies/", "")
+                    yield CompanySubUrlItem(
+                        _id = company_id,
+                        name=compamy_name,
+                        url= company_sub_url
+                    )
+                else: 
+                    company_id = company_sub_url.replace("https://www.vietnamworks.com/company/", "")
+                    yield CompanyUrlItem(
+                        _id = company_id,
+                        name=compamy_name,
+                        url= company_sub_url
+                    )
             
 
             location = item.css(".company-location")
@@ -98,7 +103,9 @@ class VnwCrawlerJobUrlSpider(VnwCrawlerBaseSpider):
         day_start = ""
         rank = ""
         skills = ""
+        skills_array = ""
         lang = ""
+        caree = []
         page_job_detail = response.css(".page-job-detail__detail")
         job_info = page_job_detail.css(".box-summary")
         for items in job_info.css(".summary-item"):
@@ -106,16 +113,19 @@ class VnwCrawlerJobUrlSpider(VnwCrawlerBaseSpider):
             content = items.css(".content::text").get()
             if content_label == "Ngày Đăng Tuyển":
                 day_start = content.strip()
+                # date_object = datetime.strptime(day_start, date_format)
+                # formatted_date = date_object.strftime("%d/%m/%Y")
             elif content_label == "Cấp Bậc":
                 rank = content.strip()
             elif content_label == "Ngành Nghề":
-                caree = []
+                
                 item = items.css(".content")
                 for a in item.css("a"):
                     ca = a.css("a::text").get()
                     caree.append(ca)
             elif content_label == "Kỹ Năng":
                 skills = content.strip()
+                skills_array = skills.split(", ")
             elif content_label == "Ngôn Ngữ Trình Bày Hồ Sơ":
                 lang = content.strip()
         
@@ -152,8 +162,7 @@ class VnwCrawlerJobUrlSpider(VnwCrawlerBaseSpider):
             key_word.append(tag) 
         detail.append({
             "offers" : offer,
-            "day _start" : day_start,
-            "skills" : skills,
+            "skills" : skills_array,
             "language" : lang,
             "description" : description,
             "requirements" : requirement,
@@ -167,7 +176,7 @@ class VnwCrawlerJobUrlSpider(VnwCrawlerBaseSpider):
             company=compamy_name,
             area=area,
             salary=salary,
-            date_update=job_url.date_update,
+            day_start=day_start,
             day_left=day_left,
             rank=rank,
             urgent=urgent,
