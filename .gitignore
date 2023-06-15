@@ -5,7 +5,7 @@ vnw_crawler/spiders/__pycache__
 vnw_crawler/__pycache__
 
 img/area/
-
+img/total/
 img/career/
 
 .scrapy/
