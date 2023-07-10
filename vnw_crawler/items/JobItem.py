@@ -18,6 +18,7 @@ class JobUrlItem():
 class JobDetailItem():
     _id : str
     name: str
+    company_id : str
     company: str
     area : str
     salary : str

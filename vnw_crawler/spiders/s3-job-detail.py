@@ -22,9 +22,9 @@ class VnwCrawlerJobUrlSpider(VnwCrawlerBaseSpider):
         if test:
             self.start_urls = [
                 JobUrlItem(
-                    _id= "1650027",
-                    name= "[Tuyển Gấp] Nhân Viên Biên Phiên Dịch Tiếng Nhật/ Japanese Interpreter",
-                    url= "https://www.vietnamworks.com/tuyen-gap-nhan-vien-bien-phien-dich-tieng-nhat-japanese-interpreter-1650027-jv"
+                    _id= "1646462",
+                    name= "Head of Vietnam's Global Corporate Banking Department (Corporate Title: Director; Working Location: Hanoi or Ho Chi Minh City)",
+                    url= "https://www.vietnamworks.com/head-of-vietnam-s-global-corporate-banking-department-corporate-title-director-working-location-hanoi-or-ho-chi-minh-city-1646462-jv"
                 )
             ]
             self.logger.info("Testing")
@@ -53,6 +53,7 @@ class VnwCrawlerJobUrlSpider(VnwCrawlerBaseSpider):
         area = ""
         salary = ""
         day_left = ""
+        company_ids = ""
 
         page_foreground = response.css(".page-job-detail__header ")
         job_header =page_foreground.css(".job-header-info")
@@ -70,9 +71,10 @@ class VnwCrawlerJobUrlSpider(VnwCrawlerBaseSpider):
             company_sub_url = sub_company.xpath("a/@href").get()
             if company_sub_url is not None:
                 if "https://www.vietnamworks.com/nha-tuyen-dung/" in company_sub_url:
-                    company_id = company_sub_url.replace("https://www.vietnamworks.com/nha-tuyen-dung/", "")
+                    company_ids = company_sub_url.replace("https://www.vietnamworks.com/nha-tuyen-dung/", "")
+                    
                     yield CompanySubUrlItem(
-                        _id = company_id,
+                        _id = company_ids,
                         name=compamy_name,
                         url= company_sub_url
                     )
@@ -173,6 +175,7 @@ class VnwCrawlerJobUrlSpider(VnwCrawlerBaseSpider):
         yield JobDetailItem(
             _id = job_url._id,
             name= job_url.name,
+            company_id= company_ids,
             company=compamy_name,
             area=area,
             salary=salary,

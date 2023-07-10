@@ -56,6 +56,9 @@ class VnwCrawlerJobUrlSpider(VnwCrawlerBaseSpider):
         )
 
     def parse(self, response):
+        self.create_connection()
+        self.collection_category_job_url = self.db[settings.get('MONGO_COLLECTION_CATEGORY_JOB_URL')]
+        self.collection_category_job_url.drop()
         data = response.json()
         job_list = data['data']
         for job in job_list:

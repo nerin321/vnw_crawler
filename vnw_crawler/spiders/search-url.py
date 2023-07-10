@@ -1,6 +1,6 @@
 # This spider will crawl company url
 # command
-# scrapy crawl vnw-company-url
+# scrapy crawl vnw-search-url
 
 import re
 import scrapy
@@ -13,13 +13,13 @@ def get_company_url():
 
 
 class VnwCrawlerCompanyUrlSpider(VnwCrawlerBaseSpider):
-    name = 'vnw-company-url'
+    name = 'vnw-search-url'
     start_urls = [get_company_url()]
 
     def parse(self, response):
-        company_list = response.css(".jKAMeZ")
-        for company in company_list.css(".hKAnke"):
-            company_info = company.css(".dDxnBm")
+        company_list = response.css(".kMGpzA")
+        for company in company_list.css(".fIewdJ"):
+            company_info = company.css(".dFvoev")
             url = company_info.xpath("a/@href").get()
             title = company_info.xpath("a/text()").get()
 
